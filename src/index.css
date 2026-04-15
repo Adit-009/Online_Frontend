@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================== THEME ================== */
+@layer base {
+  :root {
+    --background: 220 20% 4%;
+    --foreground: 0 0% 98%;
+
+    --card: 220 20% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 220 20% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 142 100% 55%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 220 15% 15%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 220 15% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 160 100% 50%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+
+    --ring: 142 100% 55%;
+    --radius: 1rem;
+  }
+
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 220 20% 4%;
+
+    --card: 0 0% 97%;
+    --card-foreground: 220 20% 4%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 4%;
+
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 15% 96%;
+    --secondary-foreground: 220 20% 4%;
+
+    --muted: 220 15% 96%;
+    --muted-foreground: 220 20% 35%;
+
+    --accent: 142 76% 36%;
+    --accent-foreground: 0 0% 100%;
+
+    --border: 220 15% 85%;
+    --input: 220 15% 85%;
+
+    --ring: 142 76% 36%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Outfit', sans-serif;
+  }
+
+  select option {
+    background-color: hsl(var(--card));
+    color: hsl(var(--foreground));
+  }
+}
+
+/* ================== BACKGROUND GLOW ================== */
+body::before {
+  content: "";
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.2), transparent);
+  top: -100px;
+  left: -100px;
+  z-index: -1;
+  filter: blur(120px);
+}
+
+/* ================== WEB3 UTILITIES ================== */
+
+/* Glow buttons */
+.glow {
+  box-shadow: 0 0 10px hsl(var(--primary) / 0.4),
+    0 0 20px hsl(var(--primary) / 0.2);
+  transition: all 0.3s ease;
+}
+
+.glow:hover {
+  box-shadow: 0 0 20px hsl(var(--primary) / 0.7),
+    0 0 40px hsl(var(--primary) / 0.4);
+}
+
+/* Glass cards */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(90deg, #22c55e, #4ade80, #22d3ee);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* ================== SCROLLBAR ================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--accent));
+}
+
+/* ================== CONTENT PROTECTION ================== */
+.video-player {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.content-protected {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.content-protected img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.content-protected video,
+.content-protected iframe {
+  -webkit-user-drag: none;
+}
+
+/* ================== VIDEO CONTROLS ================== */
+video::-internal-media-controls-download-button {
+  display: none;
+}
+
+video::-webkit-media-controls-download-button {
+  display: none;
+}
+
+/* ================== SHIMMER ================== */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(to right,
+      hsl(var(--card)) 0%,
+      hsl(var(--primary) / 0.2) 50%,
+      hsl(var(--card)) 100%);
+  background-size: 1000px 100%;
+}
