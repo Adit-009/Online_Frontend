@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Play, Lock, CheckCircle, ChevronRight } from 'lucide-react';
@@ -20,40 +20,7 @@ export default function CoursePlayer() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const playerRef = useRef(null);
 
-  useEffect(() => {
-    fetchCourseContent();
-    
-    // Listen for fullscreen changes
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-  }, [id]);
-
-  const toggleFullscreen = () => {
-    if (!playerRef.current) return;
-
-    if (!document.fullscreenElement) {
-      if (playerRef.current.requestFullscreen) {
-        playerRef.current.requestFullscreen();
-      } else if (playerRef.current.webkitRequestFullscreen) {
-        playerRef.current.webkitRequestFullscreen();
-      } else if (playerRef.current.msRequestFullscreen) {
-        playerRef.current.msRequestFullscreen();
-      }
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      }
-    }
-  };
-
-  const fetchCourseContent = async () => {
+  const fetchCourseContent = useCallback(async () => {
     try {
       const [contentData, enrollmentData] = await Promise.all([
         api.courses.getContent(id),
@@ -75,6 +42,39 @@ export default function CoursePlayer() {
       toast.error('Failed to load course content');
     } finally {
       setLoading(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchCourseContent();
+    
+    // Listen for fullscreen changes
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, [fetchCourseContent]);
+
+  const toggleFullscreen = () => {
+    if (!playerRef.current) return;
+
+    if (!document.fullscreenElement) {
+      if (playerRef.current.requestFullscreen) {
+        playerRef.current.requestFullscreen();
+      } else if (playerRef.current.webkitRequestFullscreen) {
+        playerRef.current.webkitRequestFullscreen();
+      } else if (playerRef.current.msRequestFullscreen) {
+        playerRef.current.msRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
     }
   };
 

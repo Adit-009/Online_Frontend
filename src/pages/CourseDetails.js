@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
@@ -29,11 +29,7 @@ export default function CourseDetails() {
     studyCentre: ''
   });
 
-  useEffect(() => {
-    fetchCourseDetails();
-  }, [id]);
-
-  const fetchCourseDetails = async () => {
+  const fetchCourseDetails = useCallback(async () => {
     try {
       const courseData = await api.courses.getById(id, false);
       setCourse(courseData);
@@ -51,7 +47,11 @@ export default function CourseDetails() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, user]);
+
+  useEffect(() => {
+    fetchCourseDetails();
+  }, [fetchCourseDetails]);
 
   const handleEnrollClick = () => {
     if (!user || user === false) {
