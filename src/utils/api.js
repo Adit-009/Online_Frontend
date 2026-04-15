@@ -1,6 +1,4 @@
-const API_URL = process.env.NODE_ENV === 'production' 
-  ? '' 
-  : (process.env.REACT_APP_API_URL || process.env.REACT_APP_BACKEND_URL || 'http://localhost:8005');
+const API_URL = process.env.REACT_APP_API_URL;
 
 // Helper to format API error details
 const formatApiErrorDetail = (detail) => {
@@ -44,7 +42,7 @@ const apiCall = async (endpoint, options = {}) => {
 
   try {
     const response = await fetch(url, config);
-    
+
     // Check if response is JSON
     const contentType = response.headers.get('content-type');
     let data;
@@ -80,7 +78,7 @@ export const api = {
   dashboard: {
     getData: () => apiCall('/api/users/dashboard', { useCache: false }),
   },
-  
+
   // Leaderboard APIs
   leaderboard: {
     get: () => apiCall('/api/leaderboard'),
