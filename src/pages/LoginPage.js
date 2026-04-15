@@ -23,28 +23,9 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      // 🔥 DUMMY ADMIN LOGIN
-      if (email === 'admin@test.com' && password === 'admin123') {
-        const dummyAdmin = {
-          _id: 'admin001',
-          name: 'Admin',
-          email: 'admin@test.com',
-          role: 'admin'
-        };
-
-        await login(null, null, dummyAdmin);
-
-        toast.success('Admin login successful!');
-        navigate('/admin');
-        return;
-      }
-
-      // ✅ Normal login
       const userData = await login(email, password);
-
       toast.success('Login successful!');
       navigate(userData.role === 'admin' ? '/admin' : '/dashboard');
-
     } catch (error) {
       toast.error(error.message || 'Login failed');
     } finally {
