@@ -33,7 +33,7 @@ export default function ProtectedVideoPlayer({ url, title, isYouTube = false, on
   };
 
   const embedUrl = isYouTube ? getSecureEmbedUrl(url) : url;
-  
+
   if (!url) return (
     <div className="w-full h-full flex items-center justify-center bg-card text-muted-foreground">
       No video available
@@ -66,7 +66,7 @@ export default function ProtectedVideoPlayer({ url, title, isYouTube = false, on
           <video
             ref={playerRef}
             className="w-full h-full object-contain"
-            controlsList="nodownload" 
+            controlsList="nodownload nofullscreen noremoteplayback"
             disablePictureInPicture
             disableRemotePlayback
             onContextMenu={(e) => { e.preventDefault(); return false; }}
@@ -83,7 +83,7 @@ export default function ProtectedVideoPlayer({ url, title, isYouTube = false, on
       )}
 
       {/* Subtle protection overlay at the top (doesn't block play button) */}
-      <div 
+      <div
         className="absolute top-0 left-0 right-0 h-16 z-10"
         onContextMenu={(e) => { e.preventDefault(); return false; }}
       />

@@ -186,6 +186,19 @@ video::-webkit-media-controls-download-button {
   display: none;
 }
 
+/* Hide native fullscreen button */
+video::-webkit-media-controls-fullscreen-button {
+  display: none !important;
+}
+
+video::-internal-media-controls-fullscreen-button {
+  display: none !important;
+}
+
+video::-ms-media-controls-fullscreen-button {
+  display: none !important;
+}
+
 /* ================== SHIMMER ================== */
 @keyframes shimmer {
   0% {
