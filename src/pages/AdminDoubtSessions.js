@@ -117,7 +117,7 @@ const AdminDoubtSessions = () => {
 
   const filteredSessions = sessions.filter(session => 
     session.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    session.courseId?.title.toLowerCase().includes(searchQuery.toLowerCase())
+    (session.courseId && session.courseId.title && session.courseId.title.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (

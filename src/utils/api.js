@@ -114,7 +114,10 @@ export const api = {
 
   // Exam APIs
   exams: {
-    getForCourse: (courseId) => apiCall(`/api/exams/course/${courseId}`),
+    getForCourse: (courseId) => {
+      if (!courseId) return Promise.resolve([]);
+      return apiCall(`/api/exams/course/${courseId}`);
+    },
     getAvailable: () => apiCall('/api/exams/available'),
     getMyExams: () => apiCall('/api/exams/my-exams'),
     book: (examId) => apiCall(`/api/exams/${examId}/book`, { method: 'POST' }),
@@ -123,7 +126,10 @@ export const api = {
 
   // Doubt Session APIs
   doubtSessions: {
-    getByCourse: (courseId) => apiCall(`/api/doubt-sessions/course/${courseId}`),
+    getByCourse: (courseId) => {
+      if (!courseId) return Promise.resolve([]);
+      return apiCall(`/api/doubt-sessions/course/${courseId}`);
+    },
     join: (sessionId) => apiCall(`/api/doubt-sessions/${sessionId}/join`, { method: 'POST' }),
     getMy: () => apiCall('/api/doubt-sessions/my-sessions'),
   },

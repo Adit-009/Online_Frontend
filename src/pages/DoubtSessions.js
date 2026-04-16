@@ -25,9 +25,10 @@ const DoubtSessions = () => {
       const enrolledData = await api.enrollments.getMy();
       setEnrollments(enrolledData);
       
-      // 2. Fetch all sessions for each enrolled course
-      const sessionPromises = enrolledData.map(enrollment => 
-        api.doubtSessions.getByCourse(enrollment.courseId?._id)
+      // 2. Fetch all sessions for each enrolled course (guard against null courseId)
+      const validEnrollments = enrolledData.filter(e => e.courseId && e.courseId._id);
+      const sessionPromises = validEnrollments.map(enrollment => 
+        api.doubtSessions.getByCourse(enrollment.courseId._id)
       );
       
       const allSessionsArrays = await Promise.all(sessionPromises);
