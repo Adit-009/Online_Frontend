@@ -3,12 +3,14 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { BookOpen, GraduationCap, Video, Award, ArrowRight, CheckCircle2, Menu, X, Sun, Moon, Trophy } from 'lucide-react';
 import { useState } from 'react';
+import useTitle from '../hooks/useTitle';
 
 const HomePage = () => {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  useTitle('Home');
 
   return (
     <div className="min-h-screen bg-background">

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { BookOpen, LogOut, Menu, X, GraduationCap, Calendar, MessageSquare, Clock, CheckCircle, Lock, Trophy, Users, Award } from 'lucide-react';
 import { toast } from 'sonner';
+import useTitle from '../hooks/useTitle';
 
 const StudentDashboard = () => {
   const { user, logout } = useAuth();
@@ -11,6 +12,7 @@ const StudentDashboard = () => {
   const [dashboardUser, setDashboardUser] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  useTitle('Student Dashboard');
 
   React.useEffect(() => {
     fetchEnrollments();

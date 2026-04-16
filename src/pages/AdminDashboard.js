@@ -3,9 +3,11 @@ import { Users, GraduationCap, BookOpen, ClipboardList, ShieldCheck } from 'luci
 import api from '../utils/api';
 import AdminLayout from '../components/AdminLayout';
 import { Link } from 'react-router-dom';
+import useTitle from '../hooks/useTitle';
 
 const AdminDashboard = () => {
   const [stats, setStats] = React.useState(null);
+  useTitle('Admin Dashboard');
 
   React.useEffect(() => {
     fetchStats();
