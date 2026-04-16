@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Eye, Mail, Calendar, Phone, MapPin, Plus, BookOpen, Users, Trash2, EyeOff, Search, CheckCircle, Zap } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '../utils/api';
@@ -28,6 +28,20 @@ const AdminStudents = () => {
   const [showReminderCenter, setShowReminderCenter] = useState(false);
   const [reminderCandidates, setReminderCandidates] = useState({ inactive: [], nearCompletion: [] });
   const [remindersLoading, setRemindersLoading] = useState(false);
+  const [enrollSearchQuery, setEnrollSearchQuery] = useState('');
+  const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
+  const [selectedStudentForEnroll, setSelectedStudentForEnroll] = useState(null);
+  const searchRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsSearchDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     fetchStudents();
@@ -98,6 +112,8 @@ const AdminStudents = () => {
       toast.success('Student enrolled successfully!');
       setShowEnrollModal(false);
       setEnrollForm({ studentId: '', courseId: '', paymentStatus: 'pending' });
+      setEnrollSearchQuery('');
+      setSelectedStudentForEnroll(null);
       if (selectedStudent) viewStudentDetails(selectedStudent);
     } catch (error) {
       toast.error(error.message || 'Failed to enroll student');
@@ -808,22 +824,84 @@ const AdminStudents = () => {
               Enroll Student in Course
             </h2>
             <form onSubmit={handleEnrollStudent} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-muted-foreground mb-2">Select Student *</label>
-                <select
-                  value={enrollForm.studentId}
-                  onChange={(e) => setEnrollForm({ ...enrollForm, studentId: e.target.value })}
-                  className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-[#22C55E]"
-                  required
-                  data-testid="enroll-student-select"
-                >
-                  <option value="">Choose a student</option>
-                  {students.map((student) => (
-                    <option key={student._id} value={student._id}>
-                      {student.name} ({student.email})
-                    </option>
-                  ))}
-                </select>
+              <div className="relative" ref={searchRef}>
+                <label className="block text-sm font-medium text-muted-foreground mb-2">Search Student *</label>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <input
+                    type="text"
+                    value={enrollSearchQuery}
+                    onChange={(e) => {
+                      setEnrollSearchQuery(e.target.value);
+                      setIsSearchDropdownOpen(true);
+                      if (!e.target.value) {
+                        setEnrollForm({ ...enrollForm, studentId: '' });
+                        setSelectedStudentForEnroll(null);
+                      }
+                    }}
+                    onFocus={() => setIsSearchDropdownOpen(true)}
+                    placeholder="Type name, email or phone..."
+                    className="w-full bg-background border border-border rounded-xl pl-10 pr-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-[#22C55E]"
+                    required={!enrollForm.studentId}
+                  />
+                </div>
+
+                {isSearchDropdownOpen && enrollSearchQuery && (
+                  <div className="absolute z-[60] mt-2 w-full bg-card border border-border rounded-xl shadow-2xl max-h-60 overflow-y-auto overflow-x-hidden">
+                    {students
+                      .filter(s => 
+                        s.name?.toLowerCase().includes(enrollSearchQuery.toLowerCase()) ||
+                        s.email?.toLowerCase().includes(enrollSearchQuery.toLowerCase()) ||
+                        s.phone?.includes(enrollSearchQuery)
+                      )
+                      .slice(0, 10).length > 0 ? (
+                        students
+                          .filter(s => 
+                            s.name?.toLowerCase().includes(enrollSearchQuery.toLowerCase()) ||
+                            s.email?.toLowerCase().includes(enrollSearchQuery.toLowerCase()) ||
+                            s.phone?.includes(enrollSearchQuery)
+                          )
+                          .slice(0, 10)
+                          .map((student) => (
+                            <div
+                              key={student._id}
+                              onClick={() => {
+                                setEnrollForm({ ...enrollForm, studentId: student._id });
+                                setEnrollSearchQuery(student.name);
+                                setSelectedStudentForEnroll(student);
+                                setIsSearchDropdownOpen(false);
+                              }}
+                              className="p-3 hover:bg-primary/5 cursor-pointer border-b border-border/50 last:border-0 transition-colors"
+                            >
+                              <div className="font-bold text-foreground text-sm">{student.name}</div>
+                              <div className="text-[10px] text-muted-foreground truncate">{student.email}</div>
+                              {student.phone && (
+                                <div className="text-[10px] text-primary font-medium">{student.phone}</div>
+                              )}
+                            </div>
+                          ))
+                      ) : (
+                        <div className="p-4 text-center text-xs text-muted-foreground">No students found</div>
+                      )}
+                  </div>
+                )}
+                
+                {selectedStudentForEnroll && (
+                  <div className="mt-2 p-2 bg-primary/5 border border-primary/20 rounded-lg flex items-center justify-between">
+                    <div className="text-[10px] text-primary font-bold uppercase tracking-wider">Selected: {selectedStudentForEnroll.name}</div>
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        setEnrollForm({ ...enrollForm, studentId: '' });
+                        setEnrollSearchQuery('');
+                        setSelectedStudentForEnroll(null);
+                      }}
+                      className="text-primary hover:text-[#EF4444]"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-muted-foreground mb-2">Select Course *</label>
