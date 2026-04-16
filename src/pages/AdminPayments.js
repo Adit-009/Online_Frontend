@@ -11,6 +11,7 @@ const AdminPayments = () => {
   const [filterCentre, setFilterCentre] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [processingId, setProcessingId] = useState(null);
+  const [updatingPaymentId, setUpdatingPaymentId] = useState(null);
 
   useEffect(() => {
     fetchEnrollments();
@@ -38,6 +39,20 @@ const AdminPayments = () => {
       toast.error('Failed to approve enrollment');
     } finally {
       setProcessingId(null);
+    }
+  };
+
+  const handlePaymentStatusUpdate = async (enrollmentId, newStatus) => {
+    try {
+      setUpdatingPaymentId(enrollmentId);
+      await api.admin.updatePaymentStatus(enrollmentId, newStatus);
+      toast.success('Payment status updated successfully');
+      fetchEnrollments();
+    } catch (error) {
+      console.error('[DEBUG] Payment Update API error:', error);
+      toast.error('Failed to update payment status');
+    } finally {
+      setUpdatingPaymentId(null);
     }
   };
 
@@ -199,8 +214,20 @@ const AdminPayments = () => {
                   </div>
                   <div className="flex items-center gap-3 sm:gap-4">
                     <div className="text-right">
-                      {getStatusBadge(enrollment.status)}
-                      <div className="flex items-center gap-1 text-muted-foreground text-xs mt-1">
+                      <div className="flex flex-col items-end gap-2">
+                        {getStatusBadge(enrollment.status)}
+                        <select
+                          value={enrollment.paymentStatus || 'pending'}
+                          onChange={(e) => handlePaymentStatusUpdate(enrollment._id, e.target.value)}
+                          disabled={updatingPaymentId === enrollment._id}
+                          className="bg-card border border-border rounded-md px-2 py-1 text-[10px] font-medium focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
+                        >
+                          <option value="pending">Pending (0%)</option>
+                          <option value="partial">Partial Payment (50%)</option>
+                          <option value="paid">Fully Paid (100%)</option>
+                        </select>
+                      </div>
+                      <div className="flex items-center justify-end gap-1 text-muted-foreground text-[10px] mt-1">
                         <Calendar className="w-3 h-3" />
                         {new Date(enrollment.enrolledAt).toLocaleDateString()}
                       </div>
