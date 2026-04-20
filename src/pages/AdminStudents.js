@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Eye, Mail, Calendar, Phone, MapPin, Plus, BookOpen, Users, Trash2, EyeOff, Search, CheckCircle, Zap } from 'lucide-react';
+import { Eye, Mail, MessageCircle, Calendar, Phone, MapPin, Plus, BookOpen, Users, Trash2, EyeOff, Search, CheckCircle, Zap } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '../utils/api';
 import AdminLayout from '../components/AdminLayout';
@@ -227,7 +227,7 @@ const AdminStudents = () => {
                 : 'bg-card border border-border text-foreground hover:border-primary/50'
               }`}
           >
-            <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
+            <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
             <span className="hidden sm:inline">Reminder Center</span>
             <span className="sm:hidden">Reminders</span>
           </button>
@@ -308,12 +308,12 @@ const AdminStudents = () => {
                         <p className="text-xs text-[#EF4444] font-medium">{s.daysInactive} days away</p>
                       </div>
                       <a
-                        href={`https://wa.me/${s.whatsappPhone || s.phone}?text=Hi%20${s.name},%20we%20miss%20you%20at%20Third%20Eye%20Computer%20Education!%20It%20has%20been%20${s.daysInactive}%20days%20since%20your%20last%20lesson.%20Continuing%20your%20studies%20regularly%20is%20the%20key%20to%20success.%20Log%20in%20today%20to%20keep%20learning!`}
+                        href={`https://wa.me/${s.whatsappPhone || s.phone}?text=Hi%20${s.name},%0A%0AOur%20records%20indicate%20that%20you%20have%20not%20accessed%20your%20course%20for%20the%20past%20${s.daysInactive}%20days.%20Consistent%20engagement%20is%20essential%20for%20successful%20course%20completion.%20Please%20log%20in%20immediately%20and%20resume%20your%20lessons%20to%20stay%20on%20track.`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-[#25D366] hover:bg-[#25D366]/90 text-white p-2 rounded-xl shadow-lg transition-transform hover:scale-110"
                       >
-                        <Mail className="w-4 h-4" />
+                        <MessageCircle className="w-4 h-4" />
                       </a>
                     </div>
                   ))
@@ -529,12 +529,12 @@ const AdminStudents = () => {
                       <Phone className="w-4 h-4" /> Call Student
                     </a>
                     <a
-                      href={`https://wa.me/${studentDetails.student.whatsappPhone || studentDetails.student.phone}?text=Hi%20${studentDetails.student.name},%20we%20noticed%20you%20haven't%20been%20active%20recently.%20Let%20us%20know%20if%20you%20need%20any%20help.`}
+                      href={`https://wa.me/${studentDetails.student.whatsappPhone || studentDetails.student.phone}?text=Hi%20${studentDetails.student.name},%0A%0AOur%20records%20indicate%20that%20you%20have%20not%20accessed%20your%20course%20for%20the%20past%20${studentDetails.student.daysInactive}%20days.%20Consistent%20engagement%20is%20essential%20for%20successful%20course%20completion.%20Please%20log%20in%20immediately%20and%20resume%20your%20lessons%20to%20stay%20on%20track.`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 px-4 py-2 rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
                     >
-                      <Mail className="w-4 h-4" /> WhatsApp Reminder
+                      <MessageCircle className="w-4 h-4" /> WhatsApp Reminder
                     </a>
                   </>
                 )}
