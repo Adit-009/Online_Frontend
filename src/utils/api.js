@@ -1,4 +1,4 @@
-const API_URL = process.env.REACT_APP_API_URL || 'https://online-backend-b1qx.onrender.com';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8005';
 
 // Helper to format API error details
 const formatApiErrorDetail = (detail) => {
@@ -86,12 +86,12 @@ export const api = {
 
   // Auth APIs
   auth: {
-    register:    (data) => apiCall('/api/auth/register', { method: 'POST', body: JSON.stringify(data) }),
-    login:       (data) => apiCall('/api/auth/login',    { method: 'POST', body: JSON.stringify(data) }),
-    logout:      ()     => apiCall('/api/auth/logout',   { method: 'POST' }),
-    getMe:       ()     => apiCall('/api/auth/me',       { silent401: true }),
-    adminExists: ()     => apiCall('/api/auth/admin-exists'),
-    setupAdmin:  (data) => apiCall('/api/auth/setup-admin', { method: 'POST', body: JSON.stringify(data) }),
+    register: (data) => apiCall('/api/auth/register', { method: 'POST', body: JSON.stringify(data) }),
+    login: (data) => apiCall('/api/auth/login', { method: 'POST', body: JSON.stringify(data) }),
+    logout: () => apiCall('/api/auth/logout', { method: 'POST' }),
+    getMe: () => apiCall('/api/auth/me', { silent401: true }),
+    adminExists: () => apiCall('/api/auth/admin-exists'),
+    setupAdmin: (data) => apiCall('/api/auth/setup-admin', { method: 'POST', body: JSON.stringify(data) }),
   },
 
   // Course APIs
