@@ -234,11 +234,13 @@ export default function CourseDetails() {
                             url={video.url}
                             title={video.title}
                             isYouTube={true}
+                            showFullscreenButton={true}
                           />
                         ) : (
                           <ProtectedVideoPlayer
                             url={video.url}
                             title={video.title}
+                            showFullscreenButton={true}
                           />
                         )}
                       </div>
