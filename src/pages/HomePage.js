@@ -263,7 +263,7 @@ const HomePage = () => {
             Ready to Start Your Journey?
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8">
-            Join Third Eye Computer Education Kathiatoli and unlock your potential
+            Join Third Eye Computer Education and unlock your potential
           </p>
           <Link
             to="/courses"

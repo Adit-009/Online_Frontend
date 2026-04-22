@@ -451,9 +451,6 @@ const AdminCourses = () => {
                     ))}
                   </div>
                 )}
-                <p className="text-muted-foreground text-xs mt-2">
-                  Add video URLs manually. Cloudinary integration coming soon.
-                </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
