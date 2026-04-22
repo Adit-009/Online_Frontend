@@ -8,9 +8,9 @@ export const Watermark = ({ text }) => {
       style={{ opacity: 0.5 }}
       data-testid="watermark-overlay"
     >
-      <div className="w-full h-full flex flex-wrap items-center justify-center gap-16 -rotate-[35deg] scale-150 z-[9999]">
+      <div className="w-full h-full flex flex-wrap items-center justify-center gap-6 sm:gap-12 lg:gap-16 -rotate-[35deg] scale-125 sm:scale-150 z-[9999]">
         {Array.from({ length: 200 }).map((_, i) => (
-          <span key={i} className="text-white text-xl font-bold whitespace-nowrap tracking-widest uppercase z-[9999]" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
+          <span key={i} className="text-white text-[10px] sm:text-xs lg:text-base font-bold whitespace-nowrap tracking-widest uppercase z-[9999] opacity-40 lg:opacity-50" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>
             {text}
           </span>
         ))}

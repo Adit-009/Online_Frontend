@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Play, Lock, CheckCircle, ChevronRight } from 'lucide-react';
-import { BookOpen, LogOut, Maximize, Minimize } from 'lucide-react';
+import { Play, Lock, CheckCircle, ChevronRight, BookOpen, LogOut, Maximize, Minimize } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '../utils/api';
 import ContentProtection, { Watermark } from '../components/ContentProtection';
