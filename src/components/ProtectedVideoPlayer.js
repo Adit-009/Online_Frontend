@@ -1,13 +1,50 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { Maximize, Minimize } from 'lucide-react';
 
 export default function ProtectedVideoPlayer({ url, title, isYouTube = false, onEnded }) {
   const playerRef = useRef(null);
+  const containerRef = useRef(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
-    // Optional: You could still set a default playback rate if needed, 
-    // but without controls it default to 1.
-  }, [url]);
+    const handleFsChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFsChange);
+    document.addEventListener('webkitfullscreenchange', handleFsChange);
+    document.addEventListener('mozfullscreenchange', handleFsChange);
+    document.addEventListener('MSFullscreenChange', handleFsChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFsChange);
+      document.removeEventListener('webkitfullscreenchange', handleFsChange);
+      document.removeEventListener('mozfullscreenchange', handleFsChange);
+      document.removeEventListener('MSFullscreenChange', handleFsChange);
+    };
+  }, []);
+
+  const handleFullscreen = () => {
+    if (!containerRef.current) return;
+
+    if (!document.fullscreenElement) {
+      const enterFs = 
+        containerRef.current.requestFullscreen?.bind(containerRef.current) ||
+        containerRef.current.webkitRequestFullscreen?.bind(containerRef.current) ||
+        containerRef.current.mozRequestFullScreen?.bind(containerRef.current) ||
+        containerRef.current.msRequestFullscreen?.bind(containerRef.current);
+      
+      if (enterFs) enterFs();
+    } else {
+      const exitFs = 
+        document.exitFullscreen?.bind(document) ||
+        document.webkitExitFullscreen?.bind(document) ||
+        document.mozCancelFullScreen?.bind(document) ||
+        document.msExitFullscreen?.bind(document);
+      
+      if (exitFs) exitFs();
+    }
+  };
 
   const getSecureEmbedUrl = (videoUrl) => {
     if (!videoUrl) return null;
@@ -24,7 +61,7 @@ export default function ProtectedVideoPlayer({ url, title, isYouTube = false, on
       modestbranding: '1',    // Minimal YouTube branding
       rel: '0',               // No related videos at the end
       showinfo: '0',          // Hide video title/info bar
-      fs: '0',                // Disable native fullscreen button
+      fs: '0',                // Disable native fullscreen button (we use our custom one)
       playsinline: '1',       // Play inline on mobile
       autoplay: '0'
     });
@@ -42,6 +79,7 @@ export default function ProtectedVideoPlayer({ url, title, isYouTube = false, on
 
   return (
     <div
+      ref={containerRef}
       key={url} // Force remount if URL changes
       className="relative w-full h-full group bg-black overflow-hidden rounded-lg shadow-2xl"
       onContextMenu={(e) => { e.preventDefault(); return false; }}
@@ -81,6 +119,19 @@ export default function ProtectedVideoPlayer({ url, title, isYouTube = false, on
           </video>
         </div>
       )}
+
+      {/* Custom Fullscreen Button (Watermark-free) */}
+      <button
+        onClick={handleFullscreen}
+        className="absolute bottom-4 right-14 z-20 p-2 bg-black/40 backdrop-blur-md border border-white/10 rounded-lg text-white opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-black/60 active:scale-95"
+        title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+      >
+        {isFullscreen ? (
+          <Minimize className="w-5 h-5" />
+        ) : (
+          <Maximize className="w-5 h-5" />
+        )}
+      </button>
 
       {/* Subtle protection overlay at the top (doesn't block play button) */}
       <div
