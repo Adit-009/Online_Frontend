@@ -1,7 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { BookOpen, GraduationCap, Video, Award, ArrowRight, CheckCircle2, Menu, X, Sun, Moon, Trophy } from 'lucide-react';
+import { BookOpen, GraduationCap, Video, Award, ArrowRight, CheckCircle2, Menu, X, Trophy } from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
 import { useState } from 'react';
 import useTitle from '../hooks/useTitle';
 
@@ -24,13 +25,7 @@ const HomePage = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-4">
-              <button
-                onClick={toggleTheme}
-                className="p-2 text-muted-foreground hover:text-foreground transition-colors mr-2 focus:outline-none"
-                aria-label="Toggle theme"
-              >
-                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
+              <ThemeToggle className="mr-2" />
               <Link
                 to="/courses"
                 className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
@@ -74,14 +69,17 @@ const HomePage = () => {
               )}
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-foreground"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            {/* Mobile Actions */}
+            <div className="flex md:hidden items-center gap-2">
+              <ThemeToggle />
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 text-foreground"
+                aria-label="Toggle menu"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
         </div>
 

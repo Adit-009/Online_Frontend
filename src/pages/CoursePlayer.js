@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Play, Lock, CheckCircle, ChevronRight, BookOpen, LogOut, Maximize, Minimize } from 'lucide-react';
 import { toast } from 'sonner';
+import ThemeToggle from '../components/ThemeToggle';
 import api from '../utils/api';
 import ContentProtection, { Watermark } from '../components/ContentProtection';
 import ProtectedVideoPlayer from '../components/ProtectedVideoPlayer';
@@ -175,7 +176,7 @@ export default function CoursePlayer() {
             </h1>
           </div>
           <div className="flex items-center gap-4">
-            <div className="hidden sm:flex flex-col items-end gap-1 mr-4">
+            <div className="hidden lg:flex flex-col items-end gap-1 mr-4">
               <div className="flex items-baseline gap-2">
                 <span className="text-muted-foreground text-[10px] uppercase tracking-wider font-bold">Course Progress</span>
                 <span className="text-primary font-bold text-sm">{completedCount}/{totalCount} completed ({enrollment.progress || 0}%)</span>
@@ -187,11 +188,12 @@ export default function CoursePlayer() {
                 ></div>
               </div>
             </div>
-            <div className="h-6 w-px bg-border mr-4 hidden sm:block"></div>
+            <div className="h-6 w-px bg-border mr-4 hidden lg:block"></div>
             <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-muted-foreground text-sm">Status: </span>
+              <span className="text-muted-foreground text-sm hidden sm:inline">Status: </span>
               <span className="text-primary font-semibold text-sm">{enrollment.progress >= 90 ? 'Completed' : 'Study In Progress'}</span>
             </div>
+            <ThemeToggle />
             <button onClick={logout} className="text-muted-foreground hover:text-foreground transition-colors">
               <LogOut className="w-5 h-5" />
             </button>

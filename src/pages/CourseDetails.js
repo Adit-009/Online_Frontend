@@ -5,6 +5,7 @@ import api from '../utils/api';
 import { toast } from 'sonner';
 import { Play, Lock, CheckCircle, HelpCircle, BadgeCheck } from 'lucide-react';
 import { GraduationCap, Clock, Send, ArrowLeft } from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
 import { isYouTubeUrl } from '../utils/videoUtils';
 import ContentProtection from '../components/ContentProtection';
 import ProtectedVideoPlayer from '../components/ProtectedVideoPlayer';
@@ -197,18 +198,21 @@ export default function CourseDetails() {
   return (
     <ContentProtection>
     <div className="min-h-screen bg-background">
-      <nav className="sticky top-0 z-50 w-full backdrop-blur-xl bg-background/80 border-b border-border h-16 flex items-center px-6">
+      <nav className="sticky top-0 z-50 w-full backdrop-blur-xl bg-background/80 border-b border-border h-16 flex items-center px-4 sm:px-6">
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
+          <Link to="/" className="text-lg sm:text-xl font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
             Third Eye Computer Education
           </Link>
-          <Link 
-            to="/courses" 
-            className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors group"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            <span className="text-sm font-medium">Back to Courses</span>
-          </Link>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <Link 
+              to="/courses" 
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors group"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              <span className="text-sm font-medium hidden sm:inline">Back to Courses</span>
+            </Link>
+          </div>
         </div>
       </nav>
 

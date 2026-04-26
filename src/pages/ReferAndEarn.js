@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Users, Copy, ExternalLink, ArrowLeft, Trophy, Award, CheckCircle, Clock, Star, Gift } from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
 import { toast } from 'sonner';
 
 const ReferAndEarn = () => {
@@ -65,6 +66,7 @@ const ReferAndEarn = () => {
             <div className="text-xl font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
               Refer & Earn
             </div>
+            <ThemeToggle />
           </div>
         </div>
       </nav>

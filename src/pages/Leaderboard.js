@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Trophy, BookOpen, Crown, ArrowLeft } from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
 import { api } from '../utils/api';
 import { Link } from 'react-router-dom';
 
@@ -87,6 +88,7 @@ const Leaderboard = () => {
                 Back to Home
               </Link>
             </div>
+            <ThemeToggle />
           </div>
         </div>
       </nav>

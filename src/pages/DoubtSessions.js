@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, MapPin, Users, Loader2, MessageSquare, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
 import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
@@ -80,13 +81,16 @@ const DoubtSessions = () => {
       {/* Header */}
       <nav className="sticky top-0 z-50 w-full backdrop-blur-xl bg-background/90 border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center gap-4 h-16">
-            <Link to="/dashboard" className="p-2 text-muted-foreground hover:text-foreground transition-colors">
-              <ArrowLeft className="w-5 h-5" />
-            </Link>
-            <h1 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
-              Doubt Clearing Classes
-            </h1>
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-4">
+              <Link to="/dashboard" className="p-2 text-muted-foreground hover:text-foreground transition-colors">
+                <ArrowLeft className="w-5 h-5" />
+              </Link>
+              <h1 className="text-lg font-bold text-foreground" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                Doubt Clearing Classes
+              </h1>
+            </div>
+            <ThemeToggle />
           </div>
         </div>
       </nav>

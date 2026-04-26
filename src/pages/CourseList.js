@@ -11,6 +11,7 @@ import {
   X,
   ArrowLeft,
 } from "lucide-react";
+import ThemeToggle from "../components/ThemeToggle";
 import { toast } from "sonner";
 
 const CourseList = () => {
@@ -63,6 +64,7 @@ const CourseList = () => {
               </Link>
             </div>
             <div className="hidden md:flex items-center gap-4">
+              <ThemeToggle />
               {user && user !== false ? (
                 <Link
                   to={user.role === "admin" ? "/admin" : "/dashboard"}
@@ -88,16 +90,19 @@ const CourseList = () => {
                 </>
               )}
             </div>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-foreground"
-            >
-              {mobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
+            <div className="flex md:hidden items-center gap-2">
+              <ThemeToggle />
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 text-foreground"
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
         {mobileMenuOpen && (

@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
 import { UserPlus, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -53,7 +54,10 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-3 sm:px-4 py-6 sm:py-12">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-3 sm:px-4 py-6 sm:py-12 relative">
+      <div className="absolute top-4 right-4 sm:top-8 sm:right-8">
+        <ThemeToggle />
+      </div>
       <div className="w-full max-w-md lg:max-w-2xl xl:max-w-3xl">
         <div className="text-center mb-4 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-1 sm:mb-2" style={{ fontFamily: 'Outfit, sans-serif' }}>

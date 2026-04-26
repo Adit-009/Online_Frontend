@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { BookOpen, LogOut, Menu, X, GraduationCap, Calendar, MessageSquare, Clock, CheckCircle, Lock, Trophy, Users, Award } from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
 import { toast } from 'sonner';
 import useTitle from '../hooks/useTitle';
 
@@ -128,6 +129,7 @@ const StudentDashboard = () => {
                 Refer & Earn
               </Link>
               <div className="flex items-center gap-4 border-l border-border pl-6">
+                <ThemeToggle />
                 <span className="text-muted-foreground text-sm">{user?.name}</span>
                 <button
                   onClick={logout}
@@ -139,12 +141,15 @@ const StudentDashboard = () => {
                 </button>
               </div>
             </div>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-foreground"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            <div className="flex md:hidden items-center gap-2">
+              <ThemeToggle />
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 text-foreground"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
         </div>
         {mobileMenuOpen && (
