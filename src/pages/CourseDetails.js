@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import { toast } from 'sonner';
-import { Play, Lock, CheckCircle } from 'lucide-react';
+import { Play, Lock, CheckCircle, HelpCircle, BadgeCheck } from 'lucide-react';
 import { GraduationCap, Clock, Send, ArrowLeft } from 'lucide-react';
 import { isYouTubeUrl } from '../utils/videoUtils';
 import ContentProtection from '../components/ContentProtection';
@@ -271,11 +271,15 @@ export default function CourseDetails() {
               <div className="mt-6 pt-6 border-t border-border space-y-3">
                 <div className="flex items-center gap-3 text-muted-foreground text-sm">
                   <Play className="w-4 h-4 text-primary" />
-                  {course.videos?.length || 0} Video Lessons
+                  Learn Anytime, Anywhere
                 </div>
                 <div className="flex items-center gap-3 text-muted-foreground text-sm">
-                  <Lock className="w-4 h-4 text-primary" />
-                  Lifetime Access
+                  <HelpCircle className="w-4 h-4 text-primary" />
+                  Doubt Support Available
+                </div>
+                <div className="flex items-center gap-3 text-muted-foreground text-sm">
+                  <BadgeCheck className="w-4 h-4 text-primary" />
+                  Certificate on Completion
                 </div>
               </div>
             </div>
