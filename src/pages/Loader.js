@@ -10,6 +10,7 @@ const Loader = () => {
   const API_URL = process.env.REACT_APP_API_URL || 'https://online-backend-b1qx.onrender.com';
 
   useEffect(() => {
+    let attempts = 0;
     const checkHealth = async () => {
       try {
         const response = await fetch(`${API_URL}/api/health`);
@@ -20,17 +21,19 @@ const Loader = () => {
           }
         }
       } catch (error) {
-        setRetryCount(prev => prev + 1);
-        if (retryCount > 5) {
+        attempts++;
+        setRetryCount(attempts);
+        if (attempts > 5) {
           setMessage('Server is starting, please wait a few seconds...');
         }
       }
     };
 
+    checkHealth(); // Immediate first check
     const intervalId = setInterval(checkHealth, 2500);
 
     return () => clearInterval(intervalId);
-  }, [navigate, retryCount, API_URL]);
+  }, [navigate, API_URL]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">

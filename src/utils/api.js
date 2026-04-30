@@ -31,8 +31,14 @@ const apiCall = async (endpoint, options = {}) => {
   }
 
   const url = `${API_URL}${endpoint}`;
+
+  // Abort after 30s to prevent hanging on cold starts
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
+
   const config = {
     credentials: 'include',
+    signal: controller.signal,
     headers: {
       'Content-Type': 'application/json',
       ...options.headers,
@@ -42,6 +48,7 @@ const apiCall = async (endpoint, options = {}) => {
 
   try {
     const response = await fetch(url, config);
+    clearTimeout(timeoutId);
 
     // Check if response is JSON
     const contentType = response.headers.get('content-type');
@@ -57,7 +64,7 @@ const apiCall = async (endpoint, options = {}) => {
       if (response.status === 401 && options.silent401) {
         return null;
       }
-      throw new Error(formatApiErrorDetail(data.error || data.detail || `Server Error ${response.status}`));
+      throw new Error(formatApiErrorDetail(data.error || data.message || data.detail || `Server Error ${response.status}`));
     }
 
     if (isGet && options.useCache) {
@@ -66,6 +73,10 @@ const apiCall = async (endpoint, options = {}) => {
 
     return data;
   } catch (error) {
+    clearTimeout(timeoutId);
+    if (error.name === 'AbortError') {
+      throw new Error('Request timed out. The server may be starting up — please try again in a moment.');
+    }
     if (error.name === 'SyntaxError') {
       throw new Error('Server returned an invalid response format.');
     }

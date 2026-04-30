@@ -78,6 +78,10 @@ export default function CourseDetails() {
 
   const handleRegisterAndEnroll = async (e) => {
     e.preventDefault();
+    if (!registerForm.studyCentre) {
+      toast.error('Please select a study centre');
+      return;
+    }
     setSubmitting(true);
     try {
       await api.enrollments.enroll({
