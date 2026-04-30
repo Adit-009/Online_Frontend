@@ -15,7 +15,11 @@ const StudentDashboard = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   useTitle('Student Dashboard');
 
-  const fetchEnrollments = React.useCallback(async () => {
+  React.useEffect(() => {
+    fetchEnrollments();
+  }, []);
+
+  const fetchEnrollments = async () => {
     try {
       const api = (await import('../utils/api')).default;
       const data = await api.dashboard.getData();
@@ -27,11 +31,7 @@ const StudentDashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
-
-  React.useEffect(() => {
-    fetchEnrollments();
-  }, [fetchEnrollments]);
+  };
 
   const getDaysInactive = () => {
     if (!dashboardUser) return 0;
