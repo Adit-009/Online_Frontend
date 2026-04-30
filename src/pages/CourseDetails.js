@@ -30,12 +30,13 @@ export default function CourseDetails() {
     studyCentre: ''
   });
 
-  const fetchCourseDetails = useCallback(async () => {
+  const fetchCourseDetails = useCallback(async (forcedUser = null) => {
     try {
       const courseData = await api.courses.getById(id, false);
       setCourse(courseData);
       
-      if (user && user !== false) {
+      const currentUser = forcedUser || user;
+      if (currentUser && currentUser !== false) {
         try {
           const enrollmentData = await api.enrollments.getByCourse(id);
           setEnrollment(enrollmentData);
@@ -93,8 +94,8 @@ export default function CourseDetails() {
       setShowRegisterModal(false);
       
       // Update local auth state and then fetch enrollment details
-      await checkAuth();
-      await fetchCourseDetails();
+      const freshUser = await checkAuth();
+      await fetchCourseDetails(freshUser);
     } catch (error) {
       toast.error(error?.message || 'Enrollment failed');
     } finally {

@@ -28,6 +28,7 @@ const AdminStudents = () => {
   const [showReminderCenter, setShowReminderCenter] = useState(false);
   const [reminderCandidates, setReminderCandidates] = useState({ inactive: [], nearCompletion: [] });
   const [remindersLoading, setRemindersLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [enrollSearchQuery, setEnrollSearchQuery] = useState('');
   const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
   const [selectedStudentForEnroll, setSelectedStudentForEnroll] = useState(null);
@@ -94,6 +95,8 @@ const AdminStudents = () => {
 
   const handleCreateStudent = async (e) => {
     e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
     try {
       await api.admin.createStudent(studentForm);
       toast.success('Student created successfully!');
@@ -102,11 +105,15 @@ const AdminStudents = () => {
       fetchStudents();
     } catch (error) {
       toast.error(error.message || 'Failed to create student');
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const handleEnrollStudent = async (e) => {
     e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
     try {
       await api.admin.enrollStudent(enrollForm);
       toast.success('Student enrolled successfully!');
@@ -117,6 +124,8 @@ const AdminStudents = () => {
       if (selectedStudent) viewStudentDetails(selectedStudent);
     } catch (error) {
       toast.error(error.message || 'Failed to enroll student');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -798,10 +807,11 @@ const AdminStudents = () => {
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 px-6 rounded-xl transition-colors"
+                  disabled={submitting}
+                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 px-6 rounded-xl transition-colors disabled:opacity-50"
                   data-testid="submit-student-btn"
                 >
-                  Add Student
+                  {submitting ? 'Submitting...' : 'Add Student'}
                 </button>
                 <button
                   type="button"
@@ -939,10 +949,11 @@ const AdminStudents = () => {
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 px-6 rounded-xl transition-colors"
+                  disabled={submitting}
+                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 px-6 rounded-xl transition-colors disabled:opacity-50"
                   data-testid="submit-enroll-btn"
                 >
-                  Enroll Student
+                  {submitting ? 'Enrolling...' : 'Enroll Student'}
                 </button>
                 <button
                   type="button"
