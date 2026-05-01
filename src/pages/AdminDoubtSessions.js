@@ -87,6 +87,9 @@ const AdminDoubtSessions = () => {
   };
 
   const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this doubt session?")) {
+      return;
+    }
     
     // Optimistic Update: Immediately remove from list
     const originalSessions = [...sessions];

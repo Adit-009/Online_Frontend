@@ -91,6 +91,9 @@ const AdminExams = () => {
   };
 
   const handleDeleteExam = async (examId) => {
+    if (!window.confirm("Are you sure you want to delete this exam? This will remove the exam and all student bookings. This action cannot be undone.")) {
+      return;
+    }
     
     // Optimistic Update: Immediately remove from list
     const originalExams = [...exams];

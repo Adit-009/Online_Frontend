@@ -130,6 +130,9 @@ const AdminStudents = () => {
   };
 
   const handleDeleteStudent = async (studentId) => {
+    if (!window.confirm("Are you sure you want to delete this student? This will also remove all their enrollments and activity logs. This action cannot be undone.")) {
+      return;
+    }
 
     // Optimistic Update: Immediately remove from list
     const originalStudents = [...students];

@@ -144,6 +144,9 @@ const AdminCourses = () => {
   };
 
   const handleDelete = async (courseId) => {
+    if (!window.confirm("Are you sure you want to deactivate this course? Students will no longer be able to enroll in it.")) {
+      return;
+    }
 
     // Optimistic Update: Immediately remove from list
     const originalCourses = [...courses];
