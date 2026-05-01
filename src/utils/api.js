@@ -57,7 +57,10 @@ const apiCall = async (endpoint, options = {}) => {
       if (response.status === 401 && options.silent401) {
         return null;
       }
-      throw new Error(formatApiErrorDetail(data.error || data.detail || `Server Error ${response.status}`));
+      const error = new Error(formatApiErrorDetail(data.error || data.detail || `Server Error ${response.status}`));
+      error.status = response.status;
+      error.data = data; // Attach full data for custom handling
+      throw error;
     }
 
     if (isGet && options.useCache) {

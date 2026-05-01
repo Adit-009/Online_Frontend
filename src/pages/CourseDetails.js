@@ -97,7 +97,17 @@ export default function CourseDetails() {
       const freshUser = await checkAuth();
       await fetchCourseDetails(freshUser);
     } catch (error) {
-      toast.error(error?.message || 'Enrollment failed');
+      if (error.data?.guideToLogin) {
+        toast.error(error.message, {
+          action: {
+            label: 'Login Now',
+            onClick: () => navigate('/login')
+          },
+          duration: 10000
+        });
+      } else {
+        toast.error(error?.message || 'Enrollment failed');
+      }
     } finally {
       setSubmitting(false);
     }

@@ -47,7 +47,17 @@ const RegisterPage = () => {
       toast.success('Registration successful!');
       navigate('/dashboard');
     } catch (error) {
-      toast.error(error.message || 'Registration failed');
+      if (error.data?.guideToLogin) {
+        toast.error(error.message, {
+          action: {
+            label: 'Login Now',
+            onClick: () => navigate('/login')
+          },
+          duration: 10000
+        });
+      } else {
+        toast.error(error.message || 'Registration failed');
+      }
     } finally {
       setLoading(false);
     }
