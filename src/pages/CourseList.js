@@ -35,6 +35,9 @@ const CourseList = () => {
     }
   };
 
+  const courseThumbnails = [
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navbar */}
