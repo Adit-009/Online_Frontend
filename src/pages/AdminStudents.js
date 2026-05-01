@@ -308,9 +308,9 @@ const AdminStudents = () => {
             className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="All">All Payments</option>
-            <option value="pending">🔴 Pending</option>
-            <option value="partial">🟡 Partial</option>
-            <option value="paid">🟢 Fully Paid</option>
+            <option value="pending">Pending (0%)</option>
+            <option value="partial">Partial (50%)</option>
+            <option value="paid">Paid (100%)</option>
           </select>
         </div>
       </div>
@@ -466,13 +466,20 @@ const AdminStudents = () => {
                         {student.activityStatus}
                       </span>
                       <div className="flex gap-1">
-                        {student.enrollments?.map((e, idx) => (
-                          <span
-                            key={idx}
-                            className={`w-2 h-2 rounded-full ${e.paymentStatus === 'paid' ? 'bg-[#22C55E]' : e.paymentStatus === 'partial' ? 'bg-[#EAB308]' : 'bg-[#EF4444]'}`}
-                            title={`${e.courseId?.title}: ${e.paymentStatus}`}
-                          ></span>
-                        ))}
+                        {student.enrollments?.map((e) => {
+                          const getPayLabel = (s) => {
+                            if (s === 'paid') return 'Paid (100%)';
+                            if (s === 'partial') return 'Partial (50%)';
+                            return 'Pending (0%)';
+                          };
+                          return (
+                            <div
+                              key={e._id}
+                              className={`w-2 h-2 rounded-full ${e.paymentStatus === 'paid' ? 'bg-[#22C55E]' : e.paymentStatus === 'partial' ? 'bg-[#EAB308]' : 'bg-[#EF4444]'}`}
+                              title={`${e.courseId?.title}: ${getPayLabel(e.paymentStatus)}`}
+                            />
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -680,9 +687,9 @@ const AdminStudents = () => {
                             onChange={(e) => handleUpdatePaymentStatus(enrollment._id, e.target.value)}
                             className="bg-card text-[10px] sm:text-xs font-bold text-foreground focus:outline-none cursor-pointer w-full"
                           >
-                            <option value="pending">🔴 Pending (0%)</option>
-                            <option value="partial">🟡 Partial (50%)</option>
-                            <option value="paid">🟢 Paid (100%)</option>
+                            <option value="pending">Pending (0%)</option>
+                            <option value="partial">Partial (50%)</option>
+                            <option value="paid">Paid (100%)</option>
                           </select>
                         </div>
 

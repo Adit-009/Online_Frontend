@@ -223,8 +223,8 @@ const AdminPayments = () => {
                           className="bg-card border border-border rounded-md px-2 py-1 text-[10px] font-medium focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
                         >
                           <option value="pending">Pending (0%)</option>
-                          <option value="partial">Partial Payment (50%)</option>
-                          <option value="paid">Fully Paid (100%)</option>
+                          <option value="partial">Partial (50%)</option>
+                          <option value="paid">Paid (100%)</option>
                         </select>
                       </div>
                       <div className="flex items-center justify-end gap-1 text-muted-foreground text-[10px] mt-1">

@@ -47,9 +47,9 @@ const ReferAndEarn = () => {
       Math.floor((dashboardUser?.rewardPoints || authUser?.rewardPoints || 0) / 50)
     );
 
-    if (count < 3) return { next: 3, progress: (count / 3) * 100, label: 'Silver Milestone', count };
-    if (count < 5) return { next: 5, progress: (count / 5) * 100, label: 'Gold Milestone', count };
-    return { next: 10, progress: (count / 10) * 100, label: 'Platinum Milestone', count };
+    if (count < 5) return { next: 5, progress: (count / 5) * 100, label: 'Silver Milestone', count };
+    if (count < 10) return { next: 10, progress: (count / 10) * 100, label: 'Gold Milestone', count };
+    return { next: 15, progress: (count / 15) * 100, label: 'Platinum Milestone', count };
   };
 
   const milestone = getMilestoneProgress();
@@ -95,24 +95,24 @@ const ReferAndEarn = () => {
                   <h3 className="text-xl font-bold text-foreground">Certification Ceremony Milestones</h3>
                 </div>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Reach 3 or 5 successful referrals to receive a special award during the **Certificate Distribution Ceremony**! 
+                  Reach 5 or 10 successful referrals to receive a special award during the **Certificate Distribution Ceremony**!
                   Milestone rewards are allotted offline.
                 </p>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm font-bold">
                     <span className="text-primary">{milestone.label}</span>
                     <span>{milestone.count} / {milestone.next}</span>
                   </div>
                   <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
-                    <div 
+                    <div
                       className="bg-primary h-full transition-all duration-1000 ease-out rounded-full"
                       style={{ width: `${milestone.progress}%` }}
                     />
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex flex-col items-center gap-2 p-6 bg-primary/5 rounded-[2rem] border border-primary/10">
                 <Gift className="w-12 h-12 text-primary" />
                 <div className="text-center">
@@ -143,7 +143,7 @@ const ReferAndEarn = () => {
           {/* Referral Action Card */}
           <div className="md:col-span-2 bg-card border border-border p-8 rounded-[2.5rem] shadow-sm relative overflow-hidden group">
             <div className="absolute -top-12 -right-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors" />
-            
+
             <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-8 items-center h-full">
               <div>
                 <h3 className="text-2xl font-bold text-foreground mb-4" style={{ fontFamily: 'Outfit, sans-serif' }}>Refer & Earn</h3>
@@ -151,8 +151,8 @@ const ReferAndEarn = () => {
                   <span className="font-mono font-bold text-primary tracking-widest text-lg line-clamp-1">
                     {dashboardUser?.referralCode || authUser?.referralCode || 'GENERATING...'}
                   </span>
-                  <button 
-                    onClick={copyReferralLink} 
+                  <button
+                    onClick={copyReferralLink}
                     className="p-2 text-muted-foreground hover:text-primary transition-colors hover:bg-primary/10 rounded-lg"
                     title="Copy Code"
                   >
@@ -162,7 +162,7 @@ const ReferAndEarn = () => {
                 <p className="text-xs text-muted-foreground italic">Unlimited invitations allowed!</p>
               </div>
               <div className="flex flex-col gap-3">
-                <button 
+                <button
                   onClick={copyReferralLink}
                   className="w-full bg-primary text-primary-foreground font-black py-4 rounded-2xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3"
                 >
@@ -195,7 +195,7 @@ const ReferAndEarn = () => {
             <div className="bg-card border border-dashed border-border p-12 rounded-[2.5rem] text-center shadow-sm">
               <Users className="w-16 h-16 text-muted-foreground/20 mx-auto mb-6" />
               <p className="text-muted-foreground text-lg">Your referrals will appear here once someone joins using your link.</p>
-              <button 
+              <button
                 onClick={copyReferralLink}
                 className="mt-6 text-primary font-bold hover:underline"
               >
@@ -217,10 +217,10 @@ const ReferAndEarn = () => {
                       <tr key={idx} className="hover:bg-muted/10 transition-colors">
                         <td className="px-8 py-5">
                           <div className="font-bold text-foreground flex items-center gap-2">
-                             <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-black">
-                                {refUser.name.charAt(0).toUpperCase()}
-                             </div>
-                             {refUser.name}
+                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-black">
+                              {refUser.name.charAt(0).toUpperCase()}
+                            </div>
+                            {refUser.name}
                           </div>
                         </td>
                         <td className="px-8 py-5 text-sm text-muted-foreground font-medium text-right">

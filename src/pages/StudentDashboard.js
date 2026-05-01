@@ -29,13 +29,11 @@ const StudentDashboard = () => {
         api.doubtSessions.getAvailable()
       ]);
 
-      const lastSeenExams = localStorage.getItem('lastSeenExams') || 0;
-      const lastSeenSessions = localStorage.getItem('lastSeenSessions') || 0;
-
-      const newExams = availableExams.filter(e => new Date(e.createdAt).getTime() > lastSeenExams).length;
-      const newSessions = availableSessions.filter(s => new Date(s.createdAt).getTime() > lastSeenSessions).length;
-
-      setBadges({ exams: newExams, doubtSessions: newSessions });
+      // Show total count of upcoming scheduled items without clearing them
+      setBadges({ 
+        exams: availableExams.length, 
+        doubtSessions: availableSessions.length 
+      });
     } catch (error) {
       console.error('Failed to check badges:', error);
     }
@@ -143,7 +141,6 @@ const StudentDashboard = () => {
               <Link 
                 to="/exams" 
                 className="text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-2 relative"
-                onClick={() => localStorage.setItem('lastSeenExams', Date.now())}
               >
                 <GraduationCap className="w-4 h-4" />
                 Exams
@@ -156,7 +153,6 @@ const StudentDashboard = () => {
               <Link 
                 to="/doubt-sessions" 
                 className="text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-2 relative"
-                onClick={() => localStorage.setItem('lastSeenSessions', Date.now())}
               >
                 <MessageSquare className="w-4 h-4" />
                 Doubt Classes
@@ -204,10 +200,7 @@ const StudentDashboard = () => {
             <Link
               to="/exams"
               className="block text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-2 py-1"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                localStorage.setItem('lastSeenExams', Date.now());
-              }}
+              onClick={() => setMobileMenuOpen(false)}
             >
               <GraduationCap className="w-4 h-4" />
               Exams
@@ -220,10 +213,7 @@ const StudentDashboard = () => {
             <Link
               to="/doubt-sessions"
               className="block text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-2 py-1"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                localStorage.setItem('lastSeenSessions', Date.now());
-              }}
+              onClick={() => setMobileMenuOpen(false)}
             >
               <MessageSquare className="w-4 h-4" />
               Doubt Classes
@@ -369,19 +359,19 @@ const StudentDashboard = () => {
                   <div className="flex flex-wrap gap-2 mb-4">
                     {getStatusBadge(enrollment)}
                     {enrollment.paymentStatus === 'paid' ? (
-                      <span className="bg-[#22C55E]/10 text-[#22C55E] px-2 sm:px-3 py-1 rounded-full text-xs flex items-center gap-1">
+                      <span className="flex items-center gap-1.5 text-[#22C55E] text-xs font-bold bg-[#22C55E]/10 px-2 py-1 rounded-full border border-[#22C55E]/20">
                         <CheckCircle className="w-3 h-3" />
-                        Fully Paid (100%) ✅
+                        Paid (100%)
                       </span>
                     ) : enrollment.paymentStatus === 'partial' ? (
-                      <span className="bg-[#EAB308]/10 text-[#EAB308] px-2 sm:px-3 py-1 rounded-full text-xs flex items-center gap-1">
+                      <span className="flex items-center gap-1.5 text-[#EAB308] text-xs font-bold bg-[#EAB308]/10 px-2 py-1 rounded-full border border-[#EAB308]/20">
                         <Clock className="w-3 h-3" />
-                        Partial Payment (50%)
+                        Partial (50%)
                       </span>
                     ) : (
-                      <span className="bg-[#EF4444]/10 text-[#EF4444] px-2 sm:px-3 py-1 rounded-full text-xs flex items-center gap-1">
-                        <Lock className="w-3 h-3" />
-                        Payment Pending (0%)
+                      <span className="flex items-center gap-1.5 text-[#EF4444] text-xs font-bold bg-[#EF4444]/10 px-2 py-1 rounded-full border border-[#EF4444]/20">
+                        <Clock className="w-3 h-3" />
+                        Pending (0%)
                       </span>
                     )}
                   </div>
