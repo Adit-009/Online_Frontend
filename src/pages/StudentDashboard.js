@@ -29,10 +29,13 @@ const StudentDashboard = () => {
         api.doubtSessions.getAvailable()
       ]);
 
-      // Show total count of upcoming scheduled items without clearing them
+      // Only show count for items the student HAS NOT joined/booked yet
+      const pendingExams = availableExams.filter(e => !e.isBooked).length;
+      const pendingSessions = availableSessions.filter(s => !s.isJoined).length;
+
       setBadges({ 
-        exams: availableExams.length, 
-        doubtSessions: availableSessions.length 
+        exams: pendingExams, 
+        doubtSessions: pendingSessions 
       });
     } catch (error) {
       console.error('Failed to check badges:', error);
