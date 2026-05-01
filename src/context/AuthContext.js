@@ -45,8 +45,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await api.auth.logout();
-    setUser(false);
+    try {
+      await api.auth.logout();
+    } catch (error) {
+      console.warn('Logout API call failed:', error);
+    } finally {
+      setUser(false);
+    }
   };
 
   return (

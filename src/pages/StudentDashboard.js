@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, LogOut, Menu, X, GraduationCap, Calendar, MessageSquare, Clock, CheckCircle, Lock, Trophy, Users, Award } from 'lucide-react';
+import { BookOpen, LogOut, Menu, X, GraduationCap, Calendar, MessageSquare, Clock, CheckCircle, Lock, Trophy, Users, Award, Download } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
 import { toast } from 'sonner';
 import useTitle from '../hooks/useTitle';
@@ -13,11 +13,39 @@ const StudentDashboard = () => {
   const [dashboardUser, setDashboardUser] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [badges, setBadges] = React.useState({ exams: 0, doubtSessions: 0 });
   useTitle('Student Dashboard');
 
   React.useEffect(() => {
     fetchEnrollments();
+    checkBadges();
   }, []);
+
+  const checkBadges = async () => {
+    try {
+      const api = (await import('../utils/api')).default;
+      const [availableExams, availableSessions] = await Promise.all([
+        api.exams.getAvailable(),
+        api.doubtSessions.getAvailable()
+      ]);
+
+      const lastSeenExams = localStorage.getItem('lastSeenExams') || 0;
+      const lastSeenSessions = localStorage.getItem('lastSeenSessions') || 0;
+
+      const newExams = availableExams.filter(e => new Date(e.createdAt).getTime() > lastSeenExams).length;
+      const newSessions = availableSessions.filter(s => new Date(s.createdAt).getTime() > lastSeenSessions).length;
+
+      setBadges({ exams: newExams, doubtSessions: newSessions });
+    } catch (error) {
+      console.error('Failed to check badges:', error);
+    }
+  };
+
+  const handleDownloadReceipt = (enrollmentId) => {
+    const api = require('../utils/api').default;
+    const url = api.enrollments.downloadReceipt(enrollmentId);
+    window.open(url, '_blank');
+  };
 
   const fetchEnrollments = async () => {
     try {
@@ -112,13 +140,31 @@ const StudentDashboard = () => {
               Third Eye Computer Education
             </Link>
             <div className="hidden md:flex items-center gap-6">
-              <Link to="/exams" className="text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-2">
+              <Link 
+                to="/exams" 
+                className="text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-2 relative"
+                onClick={() => localStorage.setItem('lastSeenExams', Date.now())}
+              >
                 <GraduationCap className="w-4 h-4" />
                 Exams
+                {badges.exams > 0 && (
+                  <span className="absolute -top-1 -right-2 bg-red-500 text-white text-[10px] font-bold px-1 rounded-full min-w-[16px] text-center">
+                    {badges.exams}
+                  </span>
+                )}
               </Link>
-              <Link to="/doubt-sessions" className="text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-2">
+              <Link 
+                to="/doubt-sessions" 
+                className="text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-2 relative"
+                onClick={() => localStorage.setItem('lastSeenSessions', Date.now())}
+              >
                 <MessageSquare className="w-4 h-4" />
                 Doubt Classes
+                {badges.doubtSessions > 0 && (
+                  <span className="absolute -top-1 -right-2 bg-red-500 text-white text-[10px] font-bold px-1 rounded-full min-w-[16px] text-center">
+                    {badges.doubtSessions}
+                  </span>
+                )}
               </Link>
               <Link to="/leaderboard" className="text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-2">
                 <Trophy className="w-4 h-4" />
@@ -158,18 +204,34 @@ const StudentDashboard = () => {
             <Link
               to="/exams"
               className="block text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-2 py-1"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                localStorage.setItem('lastSeenExams', Date.now());
+              }}
             >
               <GraduationCap className="w-4 h-4" />
               Exams
+              {badges.exams > 0 && (
+                <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1">
+                  {badges.exams}
+                </span>
+              )}
             </Link>
             <Link
               to="/doubt-sessions"
               className="block text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-2 py-1"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                localStorage.setItem('lastSeenSessions', Date.now());
+              }}
             >
               <MessageSquare className="w-4 h-4" />
               Doubt Classes
+              {badges.doubtSessions > 0 && (
+                <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1">
+                  {badges.doubtSessions}
+                </span>
+              )}
             </Link>
             <Link
               to="/leaderboard"
@@ -323,7 +385,16 @@ const StudentDashboard = () => {
                       </span>
                     )}
                   </div>
-                  {getActionButton(enrollment)}
+                  <div className="flex flex-col gap-2">
+                    {getActionButton(enrollment)}
+                    <button
+                      onClick={() => handleDownloadReceipt(enrollment._id)}
+                      className="w-full bg-card border border-border hover:border-primary/50 text-foreground font-medium py-2 sm:py-2.5 px-4 rounded-xl transition-colors text-sm flex items-center justify-center gap-2"
+                    >
+                      <Download className="w-4 h-4" />
+                      Download Receipt
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

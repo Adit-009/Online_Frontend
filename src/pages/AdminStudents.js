@@ -169,6 +169,26 @@ const AdminStudents = () => {
     }
   };
 
+  const handleToggleEligibility = async (enrollmentId, currentStatus) => {
+    try {
+      const newStatus = !currentStatus;
+      await api.admin.toggleEligibility(enrollmentId, newStatus);
+      toast.success(`Exam eligibility ${newStatus ? 'enabled' : 'disabled'}`);
+
+      // Update local state for student details if currently viewing
+      if (studentDetails) {
+        setStudentDetails({
+          ...studentDetails,
+          enrollments: studentDetails.enrollments.map(en =>
+            en._id === enrollmentId ? { ...en, examEligible: newStatus } : en
+          )
+        });
+      }
+    } catch (error) {
+      toast.error('Failed to update exam eligibility');
+    }
+  };
+
   const handleUpdatePaymentStatus = async (enrollmentId, newStatus) => {
     try {
       await api.admin.updatePaymentStatus(enrollmentId, newStatus);
@@ -563,21 +583,39 @@ const AdminStudents = () => {
                     <div key={enrollment._id} className="bg-background border border-border rounded-xl p-4">
                       <div className="flex justify-between items-start mb-2">
                         <h4 className="text-foreground font-medium">{enrollment.courseId?.title}</h4>
-                        <div className="flex items-center gap-2 sm:gap-3">
-                          <span className={`text-[10px] font-medium ${enrollment.adminOverride ? 'text-primary' : 'text-muted-foreground'}`}>
-                            Admin Override
-                          </span>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleToggleOverride(enrollment._id, enrollment.adminOverride);
-                            }}
-                            className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${enrollment.adminOverride ? 'bg-primary' : 'bg-border'}`}
-                          >
-                            <span
-                              className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${enrollment.adminOverride ? 'translate-x-5' : 'translate-x-1'}`}
-                            />
-                          </button>
+                        <div className="flex flex-col gap-2 items-end">
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            <span className={`text-[10px] font-bold ${enrollment.examEligible ? 'text-green-500' : 'text-muted-foreground'}`}>
+                              Exam Eligibility
+                            </span>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleEligibility(enrollment._id, enrollment.examEligible);
+                              }}
+                              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${enrollment.examEligible ? 'bg-green-500' : 'bg-border'}`}
+                            >
+                              <span
+                                className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${enrollment.examEligible ? 'translate-x-5' : 'translate-x-1'}`}
+                              />
+                            </button>
+                          </div>
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            <span className={`text-[10px] font-medium ${enrollment.adminOverride ? 'text-primary' : 'text-muted-foreground'}`}>
+                              Admin Override
+                            </span>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleOverride(enrollment._id, enrollment.adminOverride);
+                              }}
+                              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${enrollment.adminOverride ? 'bg-primary' : 'bg-border'}`}
+                            >
+                              <span
+                                className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${enrollment.adminOverride ? 'translate-x-5' : 'translate-x-1'}`}
+                              />
+                            </button>
+                          </div>
                         </div>
                       </div>
 
@@ -602,14 +640,14 @@ const AdminStudents = () => {
                             const minProgress = enrollment.courseId?.minProgress || 80;
                             const isDateEligible = new Date() >= eligibilityDate;
                             const isProgressEligible = (enrollment.progress || 0) >= minProgress;
-                            const isFullyEligible = enrollment.adminOverride || (isDateEligible && isProgressEligible);
+                            const isFullyEligible = enrollment.examEligible || enrollment.adminOverride;
 
                             return (
                               <div className="space-y-1">
                                 <div className="flex justify-between items-center text-[10px] sm:text-xs">
                                   <span className="text-muted-foreground">Exam Eligibility:</span>
                                   <span className={`font-bold ${isFullyEligible ? 'text-primary' : 'text-[#EAB308]'}`}>
-                                    {isFullyEligible ? 'ELIGIBLE NOW' : 'NOT YET ELIGIBLE'}
+                                    {isFullyEligible ? 'ELIGIBLE' : 'NOT ELIGIBLE'}
                                   </span>
                                 </div>
                                 <div className="flex justify-between items-center text-[10px] text-muted-foreground">

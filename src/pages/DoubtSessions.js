@@ -22,23 +22,17 @@ const DoubtSessions = () => {
     try {
       setLoading(true);
       
-      // 1. Get student enrollments to know which courses they can see sessions for
+      // 1. Get student enrollments for context
       const enrolledData = await api.enrollments.getMy();
       setEnrollments(enrolledData);
       
-      // 2. Fetch all sessions for each enrolled course (guard against null courseId)
-      const validEnrollments = enrolledData.filter(e => e.courseId && e.courseId._id);
-      const sessionPromises = validEnrollments.map(enrollment => 
-        api.doubtSessions.getByCourse(enrollment.courseId._id)
-      );
-      
-      const allSessionsArrays = await Promise.all(sessionPromises);
-      const flattenedSessions = allSessionsArrays.flat();
+      // 2. Fetch ALL upcoming doubt sessions
+      const allSessions = await api.doubtSessions.getAvailable();
       
       // 3. Get sessions user has already joined
       const joinedData = await api.doubtSessions.getMy();
       
-      setAvailableSessions(flattenedSessions);
+      setAvailableSessions(allSessions);
       setMySessions(joinedData);
       
     } catch (error) {
@@ -103,20 +97,11 @@ const DoubtSessions = () => {
           <p className="text-muted-foreground text-lg">Select an upcoming session to resolve your doubts with instructors.</p>
         </div>
 
-        {enrollments.length === 0 ? (
-          <div className="bg-card border border-border rounded-3xl p-12 text-center">
-            <MessageSquare className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-foreground mb-2">No Courses Enrolled</h3>
-            <p className="text-muted-foreground mb-6">You need to be enrolled in a course to attend doubt sessions.</p>
-            <Link to="/courses" className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-8 py-3 rounded-xl transition-colors inline-block">
-              Browse Courses
-            </Link>
-          </div>
-        ) : availableSessions.length === 0 ? (
+        {availableSessions.length === 0 ? (
           <div className="bg-card border border-border rounded-3xl p-12 text-center">
             <Calendar className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-foreground mb-2">No Sessions Scheduled</h3>
-            <p className="text-muted-foreground">There are no upcoming doubt sessions for your enrolled courses right now.</p>
+            <p className="text-muted-foreground">There are no upcoming doubt clearing sessions right now.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -129,7 +114,7 @@ const DoubtSessions = () => {
                   <div className="p-6 flex-1">
                     <div className="flex justify-between items-start mb-4">
                       <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full border border-primary/20">
-                        {enrollments.find(e => e.courseId._id === session.courseId)?.courseId?.title || 'Course Session'}
+                        {session.courseId?.title || 'General Session'}
                       </span>
                       {joined && (
                         <span className="flex items-center gap-1 text-primary text-xs font-bold">

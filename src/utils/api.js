@@ -110,6 +110,7 @@ export const api = {
     getByCourse: (courseId) => apiCall(`/api/enrollments/${courseId}`),
     enroll: (data) => apiCall('/api/enrollments/enroll', { method: 'POST', body: JSON.stringify(data) }),
     enrollLoggedIn: (data) => apiCall('/api/enrollments/enroll-loggedin', { method: 'POST', body: JSON.stringify(data) }),
+    downloadReceipt: (id) => `${API_URL}/api/enrollments/download/${id}`, // Returns the direct URL
   },
 
   // Exam APIs
@@ -130,6 +131,7 @@ export const api = {
       if (!courseId) return Promise.resolve([]);
       return apiCall(`/api/doubt-sessions/course/${courseId}`);
     },
+    getAvailable: () => apiCall('/api/doubt-sessions/available'),
     join: (sessionId) => apiCall(`/api/doubt-sessions/${sessionId}/join`, { method: 'POST' }),
     getMy: () => apiCall('/api/doubt-sessions/my-sessions'),
   },
@@ -157,6 +159,7 @@ export const api = {
     approveEnrollment: (id) => apiCall(`/api/admin/enrollments/${id}/pay`, { method: 'PUT' }),
     updatePaymentStatus: (id, paymentStatus) => apiCall(`/api/admin/enrollments/${id}/payment-status`, { method: 'PUT', body: JSON.stringify({ paymentStatus }) }),
     toggleOverride: (id, adminOverride) => apiCall(`/api/admin/enrollments/${id}/override`, { method: 'PUT', body: JSON.stringify({ adminOverride }) }),
+    toggleEligibility: (id, examEligible) => apiCall(`/api/admin/enrollments/${id}/eligibility`, { method: 'PUT', body: JSON.stringify({ examEligible }) }),
     rejectEnrollment: (id) => apiCall(`/api/admin/enrollments/${id}`, { method: 'DELETE' }),
     // Exams
     createExam: (data) => apiCall('/api/admin/exams', { method: 'POST', body: JSON.stringify(data) }),
