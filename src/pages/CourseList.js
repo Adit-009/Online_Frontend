@@ -35,12 +35,6 @@ const CourseList = () => {
     }
   };
 
-  const courseThumbnails = [
-    "https://images.unsplash.com/photo-1529429612779-c8e40ef2f36d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MTJ8MHwxfHNlYXJjaHw0fHxzdHVkZW50JTIwbGFwdG9wJTIwcHJvZ3JhbW1pbmd8ZW58MHx8fHwxNzc1MTQ3MjA1fDA&ixlib=rb-4.1.0&q=85",
-    "https://static.prod-images.emergentagent.com/jobs/66838629-e509-4d2a-8f87-2a5033421bcf/images/79543d13edb80149ead71ed4591f28a405fd6e2d57b396f912b67ef528bf00a5.png",
-    "https://images.pexels.com/photos/1181281/pexels-photo-1181281.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-  ];
-
   return (
     <div className="min-h-screen bg-background">
       {/* Navbar */}
