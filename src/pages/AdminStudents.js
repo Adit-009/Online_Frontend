@@ -607,22 +607,6 @@ const AdminStudents = () => {
                               />
                             </button>
                           </div>
-                          <div className="flex items-center gap-2 sm:gap-3">
-                            <span className={`text-[10px] font-medium ${enrollment.adminOverride ? 'text-primary' : 'text-muted-foreground'}`}>
-                              Admin Override
-                            </span>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleToggleOverride(enrollment._id, enrollment.adminOverride);
-                              }}
-                              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${enrollment.adminOverride ? 'bg-primary' : 'bg-border'}`}
-                            >
-                              <span
-                                className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${enrollment.adminOverride ? 'translate-x-5' : 'translate-x-1'}`}
-                              />
-                            </button>
-                          </div>
                         </div>
                       </div>
 
@@ -647,7 +631,7 @@ const AdminStudents = () => {
                             const minProgress = enrollment.courseId?.minProgress || 80;
                             const isDateEligible = new Date() >= eligibilityDate;
                             const isProgressEligible = (enrollment.progress || 0) >= minProgress;
-                            const isFullyEligible = enrollment.examEligible || enrollment.adminOverride;
+                            const isFullyEligible = enrollment.examEligible;
 
                             return (
                               <div className="space-y-1">
