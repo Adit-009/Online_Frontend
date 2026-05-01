@@ -641,19 +641,23 @@ const AdminStudents = () => {
                                     {isFullyEligible ? 'ELIGIBLE' : 'NOT ELIGIBLE'}
                                   </span>
                                 </div>
-                                <div className="flex justify-between items-center text-[10px] text-muted-foreground">
-                                  <span>Date Requirement:</span>
-                                  <span>
-                                    {isDateEligible ? 'Passed' : `Eligible on ${eligibilityDate.toLocaleDateString()}`}
-                                  </span>
+                                  {!isFullyEligible && (
+                                    <>
+                                      <div className="flex justify-between items-center text-[10px] text-muted-foreground">
+                                        <span>Date Requirement:</span>
+                                        <span>
+                                          {isDateEligible ? 'Passed' : `Eligible on ${eligibilityDate.toLocaleDateString()}`}
+                                        </span>
+                                      </div>
+                                      <div className="flex justify-between items-center text-[10px] text-muted-foreground">
+                                        <span>Progress Requirement:</span>
+                                        <span>
+                                          {isProgressEligible ? 'Passed' : `Need ${minProgress}% (Current: ${enrollment.progress || 0}%)`}
+                                        </span>
+                                      </div>
+                                    </>
+                                  )}
                                 </div>
-                                <div className="flex justify-between items-center text-[10px] text-muted-foreground">
-                                  <span>Progress Requirement:</span>
-                                  <span>
-                                    {isProgressEligible ? 'Passed' : `Need ${minProgress}% (Current: ${enrollment.progress || 0}%)`}
-                                  </span>
-                                </div>
-                              </div>
                             );
                           })()}
                         </div>
