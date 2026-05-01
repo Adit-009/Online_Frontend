@@ -153,42 +153,60 @@ const AdminStudents = () => {
   };
 
   const handleToggleOverride = async (enrollmentId, currentStatus) => {
+    const newStatus = !currentStatus;
+    const prevStudents = [...students];
+    const prevDetails = studentDetails ? { ...studentDetails } : null;
+
+    // OPTIMISTIC UPDATE
+    setStudents(prev => prev.map(s => ({
+      ...s,
+      enrollments: s.enrollments ? s.enrollments.map(e => e._id === enrollmentId ? { ...e, adminOverride: newStatus } : e) : []
+    })));
+
+    if (studentDetails) {
+      setStudentDetails(prev => ({
+        ...prev,
+        enrollments: prev.enrollments.map(e => e._id === enrollmentId ? { ...e, adminOverride: newStatus } : e)
+      }));
+    }
+
     try {
-      const newStatus = !currentStatus;
       await api.admin.toggleOverride(enrollmentId, newStatus);
       toast.success(`Admin override ${newStatus ? 'enabled' : 'disabled'}`);
-
-      // Update local state for student details if currently viewing
-      if (studentDetails) {
-        setStudentDetails({
-          ...studentDetails,
-          enrollments: studentDetails.enrollments.map(en =>
-            en._id === enrollmentId ? { ...en, adminOverride: newStatus } : en
-          )
-        });
-      }
     } catch (error) {
-      toast.error('Failed to update admin override');
+      console.error('Failed to toggle override:', error);
+      toast.error('Failed to update status');
+      setStudents(prevStudents);
+      setStudentDetails(prevDetails);
     }
   };
 
   const handleToggleEligibility = async (enrollmentId, currentStatus) => {
+    const newStatus = !currentStatus;
+    const prevStudents = [...students];
+    const prevDetails = studentDetails ? { ...studentDetails } : null;
+
+    // OPTIMISTIC UPDATE
+    setStudents(prev => prev.map(s => ({
+      ...s,
+      enrollments: s.enrollments ? s.enrollments.map(e => e._id === enrollmentId ? { ...e, examEligible: newStatus } : e) : []
+    })));
+
+    if (studentDetails) {
+      setStudentDetails(prev => ({
+        ...prev,
+        enrollments: prev.enrollments.map(e => e._id === enrollmentId ? { ...e, examEligible: newStatus } : e)
+      }));
+    }
+
     try {
-      const newStatus = !currentStatus;
       await api.admin.toggleEligibility(enrollmentId, newStatus);
       toast.success(`Exam eligibility ${newStatus ? 'enabled' : 'disabled'}`);
-
-      // Update local state for student details if currently viewing
-      if (studentDetails) {
-        setStudentDetails({
-          ...studentDetails,
-          enrollments: studentDetails.enrollments.map(en =>
-            en._id === enrollmentId ? { ...en, examEligible: newStatus } : en
-          )
-        });
-      }
     } catch (error) {
-      toast.error('Failed to update exam eligibility');
+      console.error('Failed to toggle eligibility:', error);
+      toast.error('Failed to update status');
+      setStudents(prevStudents);
+      setStudentDetails(prevDetails);
     }
   };
 

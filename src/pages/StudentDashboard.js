@@ -18,29 +18,7 @@ const StudentDashboard = () => {
 
   React.useEffect(() => {
     fetchEnrollments();
-    checkBadges();
   }, []);
-
-  const checkBadges = async () => {
-    try {
-      const api = (await import('../utils/api')).default;
-      const [availableExams, availableSessions] = await Promise.all([
-        api.exams.getAvailable(),
-        api.doubtSessions.getAvailable()
-      ]);
-
-      // Only show count for items the student HAS NOT joined/booked yet
-      const pendingExams = availableExams.filter(e => !e.isBooked).length;
-      const pendingSessions = availableSessions.filter(s => !s.isJoined).length;
-
-      setBadges({ 
-        exams: pendingExams, 
-        doubtSessions: pendingSessions 
-      });
-    } catch (error) {
-      console.error('Failed to check badges:', error);
-    }
-  };
 
   const handleDownloadReceipt = (enrollmentId) => {
     const api = require('../utils/api').default;
@@ -55,6 +33,9 @@ const StudentDashboard = () => {
       setEnrollments(data.enrollments || []);
       setRecentActivities(data.recentActivities || []);
       setDashboardUser(data.user || null);
+      if (data.badges) {
+        setBadges(data.badges);
+      }
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
     } finally {
