@@ -95,6 +95,19 @@ const StudentDashboard = () => {
     return null;
   };
 
+  const getRemainingDays = (enrollment) => {
+    if (!enrollment.enrolledAt || !enrollment.courseId?.minDaysBeforeExam) return null;
+    if (enrollment.examEligible) return 0; // Already marked eligible by admin
+
+    const enrolledDate = new Date(enrollment.enrolledAt);
+    const minDays = enrollment.courseId.minDaysBeforeExam;
+    const eligibilityDate = new Date(enrolledDate.getTime() + minDays * 24 * 60 * 60 * 1000);
+    const today = new Date();
+    
+    const diffTime = eligibilityDate - today;
+    return Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+  };
+
   const getActionButton = (enrollment) => {
     if (enrollment.status === 'paid') {
       return (
@@ -358,6 +371,21 @@ const StudentDashboard = () => {
                   </div>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {getStatusBadge(enrollment)}
+                    {enrollment.status === 'paid' && (
+                      <>
+                        {getRemainingDays(enrollment) > 0 ? (
+                          <span className="flex items-center gap-1.5 text-[#EAB308] text-xs font-bold bg-[#EAB308]/10 px-2 py-1 rounded-full border border-[#EAB308]/20">
+                            <Clock className="w-3 h-3" />
+                            Exam in {getRemainingDays(enrollment)} Days
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-1.5 text-[#22C55E] text-xs font-bold bg-[#22C55E]/10 px-2 py-1 rounded-full border border-[#22C55E]/20">
+                            <GraduationCap className="w-3 h-3" />
+                            Eligible for Exam
+                          </span>
+                        )}
+                      </>
+                    )}
                     {enrollment.paymentStatus === 'paid' ? (
                       <span className="flex items-center gap-1.5 text-[#22C55E] text-xs font-bold bg-[#22C55E]/10 px-2 py-1 rounded-full border border-[#22C55E]/20">
                         <CheckCircle className="w-3 h-3" />
