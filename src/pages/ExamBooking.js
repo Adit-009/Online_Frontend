@@ -175,15 +175,13 @@ const ExamBooking = () => {
                     </button>
                   ) : (
                     <div className="space-y-3">
-                      {!exam.eligibilityDetails?.adminOverride && (
-                        <>
-                          {exam.eligibilityDetails?.daysLeft > 0 && (
-                            <div className="flex items-center gap-2 text-[#EAB308] bg-[#EAB308]/10 p-3 rounded-xl text-xs">
-                              <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                              <span>You can book exam after <b>{exam.eligibilityDetails.daysLeft} days</b> ⏳</span>
-                            </div>
-                          )}
-                          {exam.eligibilityDetails?.currentProgress < exam.eligibilityDetails?.requiredProgress && (
+                      {exam.eligibilityDetails?.daysLeft > 0 && (
+                        <div className="flex items-center gap-2 text-[#EAB308] bg-[#EAB308]/10 p-3 rounded-xl text-xs font-bold border border-[#EAB308]/20">
+                          <Clock className="w-4 h-4 flex-shrink-0" />
+                          <span>You can book exam after <b>{exam.eligibilityDetails.daysLeft} days</b> ⏳</span>
+                        </div>
+                      )}
+                      {exam.eligibilityDetails?.currentProgress < exam.eligibilityDetails?.requiredProgress && (
                             <div className="flex items-center gap-2 text-[#EAB308] bg-[#EAB308]/10 p-3 rounded-xl text-xs">
                               <AlertCircle className="w-4 h-4 flex-shrink-0" />
                               <span>Complete <b>{exam.eligibilityDetails.requiredProgress}%</b> of course to unlock exam 📊 (Current: {Math.floor(exam.eligibilityDetails.currentProgress)}%)</span>
@@ -195,8 +193,6 @@ const ExamBooking = () => {
                               <span>Your enrollment must be approved before you can book this exam.</span>
                             </div>
                           )}
-                        </>
-                      )}
                     </div>
                   )}
                 </div>
