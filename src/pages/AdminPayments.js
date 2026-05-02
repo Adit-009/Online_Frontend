@@ -59,6 +59,14 @@ const AdminPayments = () => {
   const handleReject = async (enrollment, isApproved = false) => {
     const enrollmentId = enrollment._id;
     
+    const confirmMessage = isApproved 
+      ? "Are you sure you want to revoke this student's access and delete the enrollment? This action cannot be undone."
+      : "Are you sure you want to remove this enrollment request?";
+
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+    
     // Optimistic Update: Immediately remove from list
     const originalEnrollments = [...enrollments];
     setEnrollments(prev => prev.filter(e => e._id !== enrollmentId));
